@@ -21,9 +21,10 @@ So I thought it might be fun to take an RC truck and add a Wyze V2 camera and a 
 ```
 cd <somewhere>
 git clone https://github.com/rickbronson/RC-Car-Camera.git
+cd RC-Car-Camera/
 git clone https://github.com/Dafang-Hacks/mips-gcc472-glibc216-64bit.git
 mkdir -p Dafang-Hacks/Main
-ln -s mips-gcc472-glibc216-64bit Dafang-Hacks/Main/toolchain
+ln -s $PWD/mips-gcc472-glibc216-64bit Dafang-Hacks/Main/toolchain
 ```
 
  - Now we need modify the u-boot env variables on a Wyze V2 (Without installing

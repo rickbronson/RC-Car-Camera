@@ -49,111 +49,11 @@ getjoystick:	getjoystick.c net.h Makefile .depend
 	$(CC) -o $@ $@.o $(LDFLAGS) $(LLIBS)
 	echo scp $(PWD)/$@ root@192.168.2.6:/usr/bin
 
-parport:	parport.c Makefile .depend
-	$(CC) $(CFLAGS) -Wa,-alh,-L -c $@.c -o $@.o > $@.lis
-	$(CC) -o $@ $@.o $(LDFLAGS) $(LLIBS)
-
-bmp2rgb565:	parport.c Makefile .depend
-	$(CC) $(CFLAGS) -Wa,-alh,-L -c $@.c -o $@.o > $@.lis
-	$(CC) -o $@ $@.o $(LDFLAGS) $(LLIBS)
-
-ftdi2:	ftdi2.c Makefile .depend
-	$(CC) $(CFLAGS) -Wa,-alh,-L -c $@.c -o $@.o > $@.lis
-	$(CC) -o $@ $@.o $(LDFLAGS) $(LLIBS) -lftdi
-
-testclock:	testclock.c Makefile .depend
-	$(CC) $(CFLAGS) -Wa,-alh,-L -c $@.c -o $@.o > $@.lis
-	$(CC) -o $@ $@.o $(LDFLAGS) $(LLIBS)
-
-serial:	serial.c Makefile .depend
-	$(CC) $(CFLAGS) -Wa,-alh,-L -c $@.c -o $@.o > $@.lis
-	$(CC) -o $@ $@.o -lpthread
-
-test:	test.c Makefile .depend
-	$(CC) $(CFLAGS) -Wa,-alh,-L -c $@.c -dD -E  > $@.pp
-	$(CC) $(CFLAGS) -Wa,-alh,-L -c $@.c -o $@.o > $@.lis
-	$(CC) -o $@ $@.o -lasound
-
-sx-at91:	sx-at91.c Makefile .depend
-	$(CC) $(CFLAGS) -Wa,-alh,-L -c $@.c -o $@.o > $@.lis
-	$(CC) -o $@ $@.o -lpci
-
-scanpci:	test.c Makefile .depend
-	$(CC) $(CFLAGS) -Wa,-alh,-L -c $@.c -o $@.o > $@.lis
-	$(CC) -o $@ $@.o -lpci
-
-#devmem:	devmem.c Makefile .depend
-#	$(CC) $(CFLAGS) -ggdb -g -c $@.c -o $@.o > $@.lis
-#	$(CC) -o $@ $@.o $(LDFLAGS) $(LLIBS)
-
-dpmsinfo:	dpmsinfo.c Makefile .depend
-	$(CC) $(CFLAGS) -Wa,-alh,-L -c $@.c -o $@.o > $@.lis
-	$(CC) -o $@ $@.o $(LDFLAGS) $(LLIBSX)
-
-fault:	fault.c Makefile .depend
-	$(CC) $(CFLAGS) -Wa,-alh,-L -c $@.c -o $@.o > $@.lis
-	$(CC) -o $@ $@.o $(LDFLAGS) $(LLIBSX)
-
-packetize:	packetize.c net.h Makefile .depend
-	$(CC) $(CFLAGS) -ggdb -Wa,-alh,-L -c $@.c -o $@.o > $@.lis
-	$(CC) -o $@ $@.o $(LDFLAGS) $(LLIBSX) -lusb
-
-sansa_crc:	sansa_crc.c Makefile .depend
-	$(CC) $(CFLAGS) -Wa,-alh,-L -c $@.c -o $@.o > $@.lis
-	$(CC) -o $@ $@.o $(LDFLAGS) $(LLIBSX)
-
 clean:
-	rm -f $(OBJS) parport testclock test core *.o *.lis .depend
-
-.PHONY: pdf
-pdf:	$(TARGET).xml $(HOME)/xml/style.dsl $(HOME)/.dvipsrc /etc/texmf/pdftex/pdftex.cfg
-	$(JADE) -t tex -d /usr/share/sgml/docbook/stylesheet/dsssl/modular/print/docbook.dsl /usr/share/sgml/declaration/xml.dcl $(TARGET).xml > $(TARGET).tex
-#	rm -f $(TARGET).xml  # get rid of this so we don't try editing it!
-	rm -f $(TARGET).aux  # if this gets corrupted then build won't work
-	pdfjadetex $(TARGET).tex  # need to run 3 times to get rid of undefs?, but supposedly you can't have in-line ps files!
-	if egrep 'There were undefined references' $(TARGET).log >/dev/null 2>&1; then pdfjadetex $(TARGET).tex; fi
-	if egrep 'There were undefined references' $(TARGET).log >/dev/null 2>&1; then pdfjadetex $(TARGET).tex; fi
-	acroread -geometry 1020x750 $(TARGET).pdf
-
-# NOTE: to make a new bbdb.xml do "bbdb, ., bbdb-xml-print (to ~/bbdb.xml)
-html:
-	java org.apache.xalan.xslt.Process -in ../bbdb.xml -xsl bbdb.xsl -out bbdb.html
-
-phone-pdf:
-	fop org.apache.fop.apps.Fop -d -xml ../bbdb.xml -xsl bbdb-phone-pdf.xsl -pdf bbdb-phone.pdf
-	acroread bbdb-phone.pdf
-
-addr-pdf:
-	fop org.apache.fop.apps.Fop -d -xml ../bbdb.xml -xsl bbdb-addr-pdf.xsl -pdf bbdb-addr.pdf
-	acroread bbdb-addr.pdf
-
-addr-phone-pdf:
-	fop org.apache.fop.apps.Fop -d -xml ../bbdb.xml -xsl bbdb-addr-phone-pdf.xsl -pdf bbdb-addr-phone.pdf
-	acroread bbdb-addr-phone.pdf
-
-xmas-sz2-pdf:
-	fop org.apache.fop.apps.Fop -d -xml ../bbdb.xml -xsl bbdb-xmas-sz2-pdf.xsl -pdf bbdb-xmas.pdf
-	acroread bbdb-xmas.pdf
-
-xmas-pdf:
-	fop org.apache.fop.apps.Fop -d -xml ../bbdb.xml -xsl bbdb-xmas-pdf.xsl -pdf bbdb-xmas.pdf
-	acroread bbdb-xmas.pdf
-
-#java -cp $(CLASSPATH) org.apache.fop.apps.Fop bbdb.fo bbdb.pdf
-
-#pdf:
-#	$(JAVA) -cp $(FOP_LIB) org.apache.fop.apps.Fop \
-#	-xml $(XML) \
-#	-xsl resume-pdf.xsl \
-#	-pdf $(STAGEDIR)/resume.pdf
-
+	rm -f $(OBJS) core *.o *.lis .depend
 
 depend .depend dep:
 	$(CC) $(CFLAGS) -M $(SRCS) > $@
-
-test2:
-	( sudo mkdir /root2/xyz )
-	ls -al /home/rick/mms
 
 dummy:
 # include a dependency file if one exists

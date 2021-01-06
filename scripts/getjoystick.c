@@ -97,7 +97,6 @@ static char command_lut[] = {
  */
 int main(int argc,char **argv) {
 	int rs, sock, read_size, pingCntr = 0;
-	struct sockaddr_in addr;
 	struct addrinfo *ai;
 	struct addrinfo hints;
 	char client_message[2];
@@ -176,10 +175,6 @@ int main(int argc,char **argv) {
 		}
 	else
 		{
-		struct timeval tv;
-		tv.tv_sec = 2;
-		tv.tv_usec = 0;
-
     /* look up server host */
 		while (1) {
 			pingCntr = 0;

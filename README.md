@@ -85,6 +85,8 @@ hearts content.
   - I've only tested this on a Wyze V2 so use caution on other
     devices.
 
+ - Grab a 16BG SD card (or larger) and use the target "mksdcard" in the main Makefile to make up an SD card.  You might have to change some things (like /dev/sdb).  You might have to unplug the card and re-plug it at the "sleep" line in the mksdcard target.
+
  - Wireup the ESP8266 into the remote control.
 
 ![Joystick mod](https://github.com/rickbronson/RC-Car-Camera/blob/master/docs/hardware/joystick-mod1.png "Joystick mod")

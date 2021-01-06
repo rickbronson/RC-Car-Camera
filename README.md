@@ -41,7 +41,7 @@ ln -s mips-gcc472-glibc216-64bit Dafang-Hacks/Main/toolchain
 
 ```
 cd /tmp
-wget rickbronson.mooo.com:30080/public_html/pub/fw_printenv
+wget https://github.com/rickbronson/RC-Car-Camera/raw/master/rootfs/bin/fw_printenv
 chmod 755 fw_printenv
 ln -s fw_printenv fw_setenv
 
@@ -50,8 +50,8 @@ cat > fw_env.config << EOF
 /dev/mtd0 0x3c000 0x4000 0x8000 1
 EOF
 
-wget rickbronson.mooo.com:30080/public_html/pub/env-sd.txt
-wget rickbronson.mooo.com:30080/public_html/pub/env-orig.txt
+wget https://github.com/rickbronson/RC-Car-Camera/raw/master/env-sd.txt
+wget https://github.com/rickbronson/RC-Car-Camera/raw/master/env-orig.txt
 ./fw_setenv -s env-sd.txt
 ```
 

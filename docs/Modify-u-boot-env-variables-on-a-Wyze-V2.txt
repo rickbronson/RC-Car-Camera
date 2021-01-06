@@ -1,0 +1,50 @@
+  How to Modify u-boot env variables on a Wyze V2 (Without installing
+  new u-boot)  Rick Bronson 9/1/2019
+
+1. Hook up serial port and log into root
+
+2. Below we are going to put fw_printenv and the default env variable
+   file in /tmp, then create the config file for fw_setenv, and
+   finally set the env var's
+
+-----------------------
+cd /tmp
+wget rickbronson.mooo.com:30080/public_html/pub/fw_printenv
+chmod 755 fw_printenv
+ln -s fw_printenv fw_setenv
+
+cat > fw_env.config << EOF
+# MTD_device_name   Device_offset   Env_size   Flash_sector_size Number_of_sector
+/dev/mtd0 0x3c000 0x4000 0x8000 1
+EOF
+
+wget rickbronson.mooo.com:30080/public_html/pub/env-orig.txt
+./fw_setenv -s env-orig.txt
+-----------------------
+
+3. Now you can check to see that the u-boot env var's got set:
+
+./fw_printenv
+
+4. Now reboot (type the command "reboot") and check that you no longer
+see:
+
+*** Warning - bad CRC, using default environment
+
+  Just below the line:
+
+SF: Detected GD25Q128
+
+  when u-boot comes up.
+
+  This means that u-boot has read the env var's out of the serial
+flash chip.  Now you can modify env-orig.txt above and tweak to your
+hearts content.
+
+  Notes:
+
+  - You still can't save env var's in u-boot via the "setenv"
+    command.  You have to use the method above to do that.
+
+  - I've only tested this on a Wyze V2 so use caution on other
+    devices.
